@@ -37,7 +37,7 @@ from einops import rearrange, repeat
 import comfy.utils
 import logging
 
-logger = logging.get_logger()
+logger = logging.getLogger()
 for handler in logger.handlers[:]:
     logger.removeHandler(handler)
 

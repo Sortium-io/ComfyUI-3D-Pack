@@ -68,7 +68,7 @@ from mvdiffusion.models.unet_mv2d_blocks import (
 
 import logging
 
-logger = logging.get_logger()
+logger = logging.getLogger()
 for handler in logger.handlers[:]:
     logger.removeHandler(handler)
 

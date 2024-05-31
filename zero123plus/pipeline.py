@@ -29,7 +29,7 @@ from diffusers.models.attention_processor import Attention, AttnProcessor, XForm
 from diffusers.utils.import_utils import is_xformers_available
 
 # remove handlers and set nly  INFO and WARNING
-logger = logging.get_logger()
+logger = logging.getLogger()
 for handler in logger.handlers[:]:
     logger.removeHandler(handler)
 

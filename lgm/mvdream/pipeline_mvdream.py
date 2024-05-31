@@ -21,7 +21,7 @@ import comfy.utils
 
 from lgm.mvdream.mv_unet import MultiViewUNetModel, get_camera
 
-logger = logging.get_logger()
+logger = logging.getLogger()
 for handler in logger.handlers[:]:
     logger.removeHandler(handler)
 

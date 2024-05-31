@@ -18,7 +18,7 @@ from diffusers.utils.torch_utils import randn_tensor
 
 from mv_unet import MultiViewUNetModel, get_camera
 
-logger = logging.get_logger()
+logger = logging.getLogger()
 if not logger.handlers:
     logging_level = logging.INFO
     logger.setLevel(logging_level)

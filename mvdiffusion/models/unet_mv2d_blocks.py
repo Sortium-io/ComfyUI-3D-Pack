@@ -31,7 +31,7 @@ from diffusers.models.unets.unet_2d_blocks import DownBlock2D, ResnetDownsampleB
 from diffusers.models.unets.unet_2d_blocks import UpBlock2D, ResnetUpsampleBlock2D, CrossAttnUpBlock2D, SimpleCrossAttnUpBlock2D, AttnUpBlock2D, SkipUpBlock2D, AttnSkipUpBlock2D, UpDecoderBlock2D, AttnUpDecoderBlock2D, KUpBlock2D, KCrossAttnUpBlock2D
 
 
-logger = logging.get_logger()
+logger = logging.getLogger()
 for handler in logger.handlers[:]:
     logger.removeHandler(handler)
 
