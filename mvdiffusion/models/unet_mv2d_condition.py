@@ -18,6 +18,7 @@ import os
 import torch
 import torch.nn as nn
 import torch.utils.checkpoint
+import sys
 
 from diffusers.configuration_utils import ConfigMixin, register_to_config
 from diffusers.loaders import UNet2DConditionLoadersMixin
@@ -66,7 +67,21 @@ from mvdiffusion.models.unet_mv2d_blocks import (
     get_up_block,
 )
 
-logger = logging.get_logger(__name__)  # pylint: disable=invalid-name
+logger = logging.get_logger()
+if not logger.handlers:
+    logging_level = logging.INFO
+    logger.setLevel(logging_level)
+    stdout_handler = logging.StreamHandler(sys.stdout)
+    stdout_handler.setLevel(logging.INFO)
+    stdout_handler.addFilter(lambda record: record.levelno <= logging.WARNING)
+    stderr_handler = logging.StreamHandler(sys.stderr)
+    stderr_handler.setLevel(logging.ERROR)
+    formatter = logging.Formatter('%(message)s')
+    stdout_handler.setFormatter(formatter)
+    stderr_handler.setFormatter(formatter)
+    logger.addHandler(stdout_handler)
+    logger.addHandler(stderr_handler)
+
 
 
 @dataclass

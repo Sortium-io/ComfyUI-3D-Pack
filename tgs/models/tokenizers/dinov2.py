@@ -22,6 +22,7 @@ from dataclasses import dataclass
 
 import torch
 import torch.utils.checkpoint
+import sys
 from torch import nn
 from torch.nn import BCEWithLogitsLoss, CrossEntropyLoss, MSELoss
 
@@ -51,7 +52,21 @@ from tgs.models.transformers import MemoryEfficientAttentionMixin
 from tgs.utils.typing import *
 
 
-logger = logging.get_logger(__name__)
+logger = logging.get_logger()
+if not logger.handlers:
+    logging_level = logging.INFO
+    logger.setLevel(logging_level)
+    stdout_handler = logging.StreamHandler(sys.stdout)
+    stdout_handler.setLevel(logging.INFO)
+    stdout_handler.addFilter(lambda record: record.levelno <= logging.WARNING)
+    stderr_handler = logging.StreamHandler(sys.stderr)
+    stderr_handler.setLevel(logging.ERROR)
+    formatter = logging.Formatter('%(message)s')
+    stdout_handler.setFormatter(formatter)
+    stderr_handler.setFormatter(formatter)
+    logger.addHandler(stdout_handler)
+    logger.addHandler(stderr_handler)
+
 
 # General docstring
 _CONFIG_FOR_DOC = "Dinov2Config"
