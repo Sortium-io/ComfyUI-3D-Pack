@@ -14,16 +14,15 @@
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Tuple, Union
 import os
-import sys
-import logging
 
 import torch
 import torch.nn as nn
 import torch.utils.checkpoint
+import transformers
 
 from diffusers.configuration_utils import ConfigMixin, register_to_config
 from diffusers.loaders import UNet2DConditionLoadersMixin
-from diffusers.utils import BaseOutput
+from diffusers.utils import BaseOutput, logging
 from diffusers.models.activations import get_activation
 from diffusers.models.attention_processor import AttentionProcessor, AttnProcessor
 from diffusers.models.embeddings import (
@@ -57,6 +56,7 @@ from diffusers.utils import (
     deprecate,
     is_accelerate_available,
     is_torch_version,
+    logging,
 )
 from diffusers import __version__
 from mvdiffusion.models.unet_mv2d_blocks import (
@@ -67,29 +67,12 @@ from mvdiffusion.models.unet_mv2d_blocks import (
     get_up_block,
 )
 
-logger = logging.getLogger()
+logging.set_verbosity_info()
 
-# Remove all handlers associated with the logger object.
-for handler in logger.handlers[:]:
-    logger.removeHandler(handler)
+logger = logging.get_logger(__name__)  # pylint: disable=invalid-name
 
-logging_level = logging.INFO
+transformers.logging.set_verbosity_info()
 
-logger.setLevel(logging_level)
-
-stdout_handler = logging.StreamHandler(sys.stdout)
-stdout_handler.setLevel(logging.INFO)
-stdout_handler.addFilter(lambda record: record.levelno <= logging.WARNING)
-
-stderr_handler = logging.StreamHandler(sys.stderr)
-stderr_handler.setLevel(logging.ERROR)  # Handle ERROR and CRITICAL
-
-formatter = logging.Formatter('%(message)s')
-stdout_handler.setFormatter(formatter)
-stderr_handler.setFormatter(formatter)
-
-logger.addHandler(stdout_handler)
-logger.addHandler(stderr_handler)
 
 @dataclass
 class UNetMV2DConditionOutput(BaseOutput):
@@ -1463,7 +1446,7 @@ class UNetMV2DConditionModel(ModelMixin, ConfigMixin, UNet2DConditionLoadersMixi
             raise RuntimeError(f"Error(s) in loading state_dict for {model.__class__.__name__}:\n\t{error_msg}")
 
         if len(unexpected_keys) > 0:
-            logging.info(
+            logger.warning(
                 f"Some weights of the model checkpoint at {pretrained_model_name_or_path} were not used when"
                 f" initializing {model.__class__.__name__}: {unexpected_keys}\n- This IS expected if you are"
                 f" initializing {model.__class__.__name__} from the checkpoint of a model trained on another task"
@@ -1474,31 +1457,31 @@ class UNetMV2DConditionModel(ModelMixin, ConfigMixin, UNet2DConditionLoadersMixi
                 " BertForSequenceClassification model)."
             )
         else:
-            logging.info(f"All model checkpoint weights were used when initializing {model.__class__.__name__}.\n")
+            logger.info(f"All model checkpoint weights were used when initializing {model.__class__.__name__}.\n")
         if len(missing_keys) > 0:
-            logging.info(
+            logger.warning(
                 f"Some weights of {model.__class__.__name__} were not initialized from the model checkpoint at"
                 f" {pretrained_model_name_or_path} and are newly initialized: {missing_keys}\nYou should probably"
                 " TRAIN this model on a down-stream task to be able to use it for predictions and inference."
             )
         elif len(mismatched_keys) == 0:
-            logging.info(
+            logger.info(
                 f"All the weights of {model.__class__.__name__} were initialized from the model checkpoint at"
                 f" {pretrained_model_name_or_path}.\nIf your task is similar to the task the model of the"
                 f" checkpoint was trained on, you can already use {model.__class__.__name__} for predictions"
                 " without further training."
             )
         if len(mismatched_keys) > 0:
-            mismatched_infoing = "\n".join(
+            mismatched_warning = "\n".join(
                 [
                     f"- {key}: found shape {shape1} in the checkpoint and {shape2} in the model instantiated"
                     for key, shape1, shape2 in mismatched_keys
                 ]
             )
-            logging.info(
+            logger.warning(
                 f"Some weights of {model.__class__.__name__} were not initialized from the model checkpoint at"
                 f" {pretrained_model_name_or_path} and are newly initialized because the shapes did not"
-                f" match:\nYou should probably TRAIN this model on a down-stream task to be"
+                f" match:\n{mismatched_warning}\nYou should probably TRAIN this model on a down-stream task to be"
                 " able to use it for predictions and inference."
             )
 
