@@ -37,20 +37,17 @@ from einops import rearrange, repeat
 import comfy.utils
 
 logger = logging.get_logger()
-if not logger.handlers:
-    logging_level = logging.INFO
-    logger.setLevel(logging_level)
-    stdout_handler = logging.StreamHandler(sys.stdout)
-    stdout_handler.setLevel(logging.INFO)
-    stdout_handler.addFilter(lambda record: record.levelno <= logging.WARNING)
-    stderr_handler = logging.StreamHandler(sys.stderr)
-    stderr_handler.setLevel(logging.ERROR)
-    formatter = logging.Formatter('%(message)s')
-    stdout_handler.setFormatter(formatter)
-    stderr_handler.setFormatter(formatter)
-    logger.addHandler(stdout_handler)
-    logger.addHandler(stderr_handler)
+for handler in logger.handlers[:]:
+    logger.removeHandler(handler)
 
+logging_level = logging.INFO
+logger.setLevel(logging_level)
+stdout_handler = logging.StreamHandler(sys.stdout)
+stdout_handler.setLevel(logging.INFO)
+stdout_handler.addFilter(lambda record: record.levelno <= logging.WARNING)
+formatter = logging.Formatter('%(message)s')
+stdout_handler.setFormatter(formatter)
+logger.addHandler(stdout_handler)
 
 
 class MVDiffusionImagePipeline(DiffusionPipeline):

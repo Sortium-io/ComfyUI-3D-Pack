@@ -30,19 +30,17 @@ from diffusers.utils.import_utils import is_xformers_available
 
 # remove handlers and set nly  INFO and WARNING
 logger = logging.get_logger()
-if not logger.handlers:
-    logging_level = logging.INFO
-    logger.setLevel(logging_level)
-    stdout_handler = logging.StreamHandler(sys.stdout)
-    stdout_handler.setLevel(logging.INFO)
-    stdout_handler.addFilter(lambda record: record.levelno <= logging.WARNING)
-    stderr_handler = logging.StreamHandler(sys.stderr)
-    stderr_handler.setLevel(logging.ERROR)
-    formatter = logging.Formatter('%(message)s')
-    stdout_handler.setFormatter(formatter)
-    stderr_handler.setFormatter(formatter)
-    logger.addHandler(stdout_handler)
-    logger.addHandler(stderr_handler)
+for handler in logger.handlers[:]:
+    logger.removeHandler(handler)
+
+logging_level = logging.INFO
+logger.setLevel(logging_level)
+stdout_handler = logging.StreamHandler(sys.stdout)
+stdout_handler.setLevel(logging.INFO)
+stdout_handler.addFilter(lambda record: record.levelno <= logging.WARNING)
+formatter = logging.Formatter('%(message)s')
+stdout_handler.setFormatter(formatter)
+logger.addHandler(stdout_handler)
 
 def to_rgb_image(maybe_rgba: Image.Image):
     if maybe_rgba.mode == 'RGB':
