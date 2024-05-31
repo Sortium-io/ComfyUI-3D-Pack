@@ -14,6 +14,7 @@
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Tuple, Union
 import os
+import sys
 
 import torch
 import torch.nn as nn
@@ -68,6 +69,8 @@ from mvdiffusion.models.unet_mv2d_blocks import (
 
 
 logger = logging.getLogger()
+
+print("Logger: ", logger.handlers)
 
 if not logger.handlers:
     logging_level = logging.INFO
