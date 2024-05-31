@@ -67,8 +67,26 @@ from mvdiffusion.models.unet_mv2d_blocks import (
 )
 
 
-logger = logging.get_logger(__name__)  # pylint: disable=invalid-name
+logger = logging.getLogger()
 
+if not logger.handlers:
+    logging_level = logging.INFO
+
+    logger.setLevel(logging_level)
+
+    stdout_handler = logging.StreamHandler(sys.stdout)
+    stdout_handler.setLevel(logging.INFO)
+    stdout_handler.addFilter(lambda record: record.levelno <= logging.WARNING)  # Only handle INFO and WARNING
+
+    stderr_handler = logging.StreamHandler(sys.stderr)
+    stderr_handler.setLevel(logging.ERROR)  # Handle ERROR and CRITICAL
+
+    formatter = logging.Formatter('%(message)s')
+    stdout_handler.setFormatter(formatter)
+    stderr_handler.setFormatter(formatter)
+
+    logger.addHandler(stdout_handler)
+    logger.addHandler(stderr_handler)
 
 @dataclass
 class UNetMV2DConditionOutput(BaseOutput):
