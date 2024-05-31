@@ -18,7 +18,6 @@ import os
 import torch
 import torch.nn as nn
 import torch.utils.checkpoint
-import transformers
 
 from diffusers.configuration_utils import ConfigMixin, register_to_config
 from diffusers.loaders import UNet2DConditionLoadersMixin
@@ -67,11 +66,7 @@ from mvdiffusion.models.unet_mv2d_blocks import (
     get_up_block,
 )
 
-logging.set_verbosity_info()
-
 logger = logging.get_logger(__name__)  # pylint: disable=invalid-name
-
-transformers.logging.set_verbosity_info()
 
 
 @dataclass
@@ -1458,32 +1453,7 @@ class UNetMV2DConditionModel(ModelMixin, ConfigMixin, UNet2DConditionLoadersMixi
             )
         else:
             logger.info(f"All model checkpoint weights were used when initializing {model.__class__.__name__}.\n")
-        if len(missing_keys) > 0:
-            logger.warning(
-                f"Some weights of {model.__class__.__name__} were not initialized from the model checkpoint at"
-                f" {pretrained_model_name_or_path} and are newly initialized: {missing_keys}\nYou should probably"
-                " TRAIN this model on a down-stream task to be able to use it for predictions and inference."
-            )
-        elif len(mismatched_keys) == 0:
-            logger.info(
-                f"All the weights of {model.__class__.__name__} were initialized from the model checkpoint at"
-                f" {pretrained_model_name_or_path}.\nIf your task is similar to the task the model of the"
-                f" checkpoint was trained on, you can already use {model.__class__.__name__} for predictions"
-                " without further training."
-            )
-        if len(mismatched_keys) > 0:
-            mismatched_warning = "\n".join(
-                [
-                    f"- {key}: found shape {shape1} in the checkpoint and {shape2} in the model instantiated"
-                    for key, shape1, shape2 in mismatched_keys
-                ]
-            )
-            logger.warning(
-                f"Some weights of {model.__class__.__name__} were not initialized from the model checkpoint at"
-                f" {pretrained_model_name_or_path} and are newly initialized because the shapes did not"
-                f" match:\n{mismatched_warning}\nYou should probably TRAIN this model on a down-stream task to be"
-                " able to use it for predictions and inference."
-            )
+        
 
         return model, missing_keys, unexpected_keys, mismatched_keys, error_msgs
 
