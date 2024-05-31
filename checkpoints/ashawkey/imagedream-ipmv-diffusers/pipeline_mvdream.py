@@ -3,6 +3,7 @@ import torch.nn.functional as F
 import inspect
 import numpy as np
 import sys
+import logging
 from typing import Callable, List, Optional, Union
 from transformers import CLIPTextModel, CLIPTokenizer, CLIPVisionModel, CLIPImageProcessor
 from diffusers import AutoencoderKL, DiffusionPipeline
@@ -10,7 +11,6 @@ from diffusers.utils import (
     deprecate,
     is_accelerate_available,
     is_accelerate_version,
-    logging,
 )
 from diffusers.configuration_utils import FrozenDict
 from diffusers.schedulers import DDIMScheduler

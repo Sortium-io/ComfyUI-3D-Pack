@@ -42,7 +42,6 @@ from transformers.utils import (
     add_code_sample_docstrings,
     add_start_docstrings,
     add_start_docstrings_to_model_forward,
-    logging,
     replace_return_docstrings,
 )
 from transformers.utils.backbone_utils import BackboneMixin
@@ -51,6 +50,7 @@ from transformers.models.dinov2.configuration_dinov2 import Dinov2Config
 from tgs.models.transformers import MemoryEfficientAttentionMixin
 from tgs.utils.typing import *
 
+import logging
 
 logger = logging.get_logger()
 for handler in logger.handlers[:]:

@@ -22,7 +22,7 @@ import sys
 
 from diffusers.configuration_utils import ConfigMixin, register_to_config
 from diffusers.loaders import UNet2DConditionLoadersMixin
-from diffusers.utils import BaseOutput, logging
+from diffusers.utils import BaseOutput
 from diffusers.models.activations import get_activation
 from diffusers.models.attention_processor import AttentionProcessor, AttnProcessor
 from diffusers.models.embeddings import (
@@ -56,7 +56,6 @@ from diffusers.utils import (
     deprecate,
     is_accelerate_available,
     is_torch_version,
-    logging,
 )
 from diffusers import __version__
 from mvdiffusion.models.unet_mv2d_blocks import (
@@ -66,6 +65,8 @@ from mvdiffusion.models.unet_mv2d_blocks import (
     get_down_block,
     get_up_block,
 )
+
+import logging
 
 logger = logging.get_logger()
 for handler in logger.handlers[:]:

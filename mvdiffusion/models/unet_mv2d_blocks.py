@@ -17,9 +17,10 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 import sys
+import logging
 from torch import nn
 
-from diffusers.utils import is_torch_version, logging
+from diffusers.utils import is_torch_version
 from diffusers.models.normalization import AdaGroupNorm
 from diffusers.models.attention_processor import Attention, AttnAddedKVProcessor, AttnAddedKVProcessor2_0
 from diffusers.models.transformers.dual_transformer_2d import DualTransformer2DModel

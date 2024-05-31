@@ -27,7 +27,7 @@ from diffusers.configuration_utils import FrozenDict
 from diffusers.image_processor import VaeImageProcessor
 from diffusers.models import AutoencoderKL, UNet2DConditionModel
 from diffusers.schedulers import KarrasDiffusionSchedulers
-from diffusers.utils import deprecate, logging
+from diffusers.utils import deprecate
 from diffusers.utils.torch_utils import randn_tensor
 from diffusers.pipelines.pipeline_utils import DiffusionPipeline
 from diffusers.pipelines.stable_diffusion import StableDiffusionPipelineOutput
@@ -35,6 +35,7 @@ from diffusers.pipelines.stable_diffusion.safety_checker import StableDiffusionS
 from einops import rearrange, repeat
 
 import comfy.utils
+import logging
 
 logger = logging.get_logger()
 for handler in logger.handlers[:]:

@@ -9,7 +9,7 @@ import torch.utils.checkpoint
 import torch.distributed
 import transformers
 import sys
-from transformers.utils import logging
+import logging
 from collections import OrderedDict
 from PIL import Image
 from torchvision import transforms
@@ -40,7 +40,7 @@ stdout_handler.setLevel(logging.INFO)
 stdout_handler.addFilter(lambda record: record.levelno <= logging.WARNING)
 formatter = logging.Formatter('%(message)s')
 stdout_handler.setFormatter(formatter)
-logger.addHandler(stdout_handler)
+logger.addHandler(stdout_handler)   
 
 def to_rgb_image(maybe_rgba: Image.Image):
     if maybe_rgba.mode == 'RGB':
