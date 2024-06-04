@@ -1304,7 +1304,6 @@ class Load_Diffusers_Pipeline:
             ckpt_path,
             torch_dtype=WEIGHT_DTYPE,
             custom_pipeline=custom_pipeline,
-            trust_remote_code=True,
         ).to(DEVICE)
         
         pipe.enable_xformers_memory_efficient_attention()
